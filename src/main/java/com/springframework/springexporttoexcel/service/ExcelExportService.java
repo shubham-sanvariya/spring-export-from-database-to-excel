@@ -1,6 +1,8 @@
 package com.springframework.springexporttoexcel.service;
 
 import com.springframework.springexporttoexcel.domain.Customer;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -10,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ExcelExportService {
@@ -85,5 +88,14 @@ public class ExcelExportService {
             createCell(row, columnCount++,customer.getAddress().getCity(),style);
             createCell(row, columnCount++,customer.getAddress().getAddress(),style);
         }
+    }
+
+    public void exportDataToExcel(HttpServletResponse response) throws IOException {
+        createHeaderRow();
+        writeCustomerData();
+        ServletOutputStream outputStream = response.getOutputStream();
+        workBook.write(outputStream);
+        workBook.close();
+        outputStream.close();
     }
 }
