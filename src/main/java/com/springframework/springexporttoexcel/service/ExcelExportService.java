@@ -65,4 +65,25 @@ public class ExcelExportService {
         createCell(row,6,"City", style);
         createCell(row,7,"Address", style);
     }
+
+    private void writeCustomerData(){
+        int rowCount = 2;
+        CellStyle style = workBook.createCellStyle();
+        XSSFFont font = workBook.createFont();
+        font.setFontHeight(14);
+        style.setFont(font);
+
+        for (Customer customer : customerList){
+            Row row = sheet.createRow(rowCount++);
+            int columnCount = 0;
+            createCell(row, columnCount++,customer.getId(),style);
+            createCell(row, columnCount++,customer.getFirstName(),style);
+            createCell(row, columnCount++,customer.getLastName(),style);
+            createCell(row, columnCount++,customer.getEmail(),style);
+            createCell(row, columnCount++,customer.getAddress().getCountry(),style);
+            createCell(row, columnCount++,customer.getAddress().getState(),style);
+            createCell(row, columnCount++,customer.getAddress().getCity(),style);
+            createCell(row, columnCount++,customer.getAddress().getAddress(),style);
+        }
+    }
 }
