@@ -3,7 +3,10 @@ package com.springframework.springexporttoexcel.service;
 import com.springframework.springexporttoexcel.domain.Customer;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -19,7 +22,7 @@ public class ExcelExportService {
         workBook = new XSSFWorkbook();
     }
 
-    private void createCells(Row row, int columnCount, Object value, CellStyle style){
+    private void createCell(Row row, int columnCount, Object value, CellStyle style){
         sheet.autoSizeColumn(columnCount);
         Cell cell = row.createCell(columnCount);
         if (value instanceof Integer){
@@ -34,5 +37,32 @@ public class ExcelExportService {
             cell.setCellValue((String) value);
         }
         cell.setCellStyle(style);
+    }
+
+    private void createHeaderRow(){
+        sheet = workBook.createSheet("Customer Information");
+        Row row = sheet.createRow(0);
+        CellStyle style = workBook.createCellStyle();
+        XSSFFont font = workBook.createFont();
+        font.setBold(true);
+        font.setFontHeight(20);
+        style.setFont(font);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        createCell(row,0,"Customer Information",style);
+        sheet.addMergedRegion(new CellRangeAddress(0,0,0,8));
+        font.setFontHeightInPoints((short) 10);
+
+        row = sheet.createRow(1);
+        font.setBold(true);
+        font.setFontHeight(16);
+        style.setFont(font);
+        createCell(row,0,"ID", style);
+        createCell(row,1,"First Name", style);
+        createCell(row,2,"Last Name", style);
+        createCell(row,3,"Email", style);
+        createCell(row,4,"Country", style);
+        createCell(row,5,"State", style);
+        createCell(row,6,"City", style);
+        createCell(row,7,"Address", style);
     }
 }
